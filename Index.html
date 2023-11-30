@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรเเกรมบันทึกรายรับ-รายจ่าย</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <h2>โปรเเกรมบันทึกรายรับ-รายจ่าย</h2>
+    <div class="container">
+        <h4>ยอดคงเหลือ  (บาท)</h4>
+        <h1 id="balance">000.00 บาท</h1>
+
+         <div class="income-expense-container">
+                <div class="showincome">
+                    <h4>รายรับ</h4>
+                    <p id="mplus" class="money plus">5000</p>
+
+                </div>
+                <div class="">
+                    <h4>รายจ่าย</h4>
+                    <p id="mminus" class="money minus">-58</p>
+
+                </div>
+          </div>   
+
+            <h3>ประวัติธุรกรรม</h3>
+            <ul id="list" class="list">
+                
+                <!-- <li class="minus"> ค่าน้ำ <samp> -5</samp>
+                <button class="delete"> X </button></li>
+
+                <li class="plus"> อ้นใช้หนี้ <samp> 500</samp>
+                <button class="delete"> X </button></li> -->
+
+            </ul>
+            <h3>เพิ่มธุรกรรม</h3>
+
+            <form action="" id="form">
+                <div class="form-control">
+                <label class="" for="text">รายการธุระกรรม </label>
+                    <input type="text" placeholder="ระบุรายการธุระกรรม" id="text">
+                </div>
+
+                <div class="form-control">
+                    <label for="amount">จำนวนเงิน <br>
+                        (+รายรับ ) , (-รายจ่าย)
+                    </label>
+                    
+                    <input type="number" placeholder="ระบุจำนวนเงิน" id="amount"></input>
+                  
+                </div>
+                <button class="btn" type="submit" id="submit">เพิ่มธุรกรรม</button>
+            </form>
+        
+
+         </div>
+
+    </div>
+<script src="script.js"></script>
+</body>
+</html>
