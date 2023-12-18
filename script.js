@@ -20,6 +20,7 @@ let transsaction = dataTransaction
 const start = () =>{
     list.innerHTML = '';
     transsaction.forEach(addDataTolist);
+    calculateMouny();
 
 }
 
@@ -32,4 +33,69 @@ const addDataTolist = (transsaction) =>{
     list.appendChild(item)
 
 }
+
+
+const  calculateMouny = () =>{
+    const amount = transsaction.map(transsaction => transsaction.amount);
+    console.log(amount);
+
+    //คำนวนยอดคงเหลือ
+    const total = amount.reduce( (result ,i)=>(result += i) );
+    console.log(total);
+
+    //คำนวนรายรับ
+    const income = amount.filter(i => i>0).reduce((result,i)=>(result += i));
+
+    console.log(income);
+    
+     //คำนวนรายจ่าย
+     const expense = Math.abs(amount.filter(i => i<0).reduce((result,i)=>(result += i)));
+
+
+     console.log(expense);
+
+     balance.innerText = ` ${total} `;
+     mplus.innerText = ` ${income} `;
+     mminus.innerText = ` ${expense} `;
+
+}
+
+
+const addTransactions = (e) => {
+    e.preventDefault();
+    if(text.value.trim() === ''|| amount.value.trim() === ''){
+        alert('กรุณากรอกข้อมูลให้ครบ');
+    }   
+    else{
+        console.log(text.value);
+        console.log(amount.value);
+        console.log(autoid());
+
+
+        const data ={
+            id:autoid(),
+            text:text.value,
+            amount:Number.parseFloat(amount.value)
+
+        }
+
+        transsaction.push(data);
+        addDataTolist(data);
+        calculateMouny();
+
+
+    }
+}
+const autoid = () => {
+    return Math.floor(Math.random() *1000000) ;
+}
+
+
+
+form.addEventListener('submit', addTransactions);
+
+
+
+
+
 start()
