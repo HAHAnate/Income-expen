@@ -6,19 +6,38 @@ const form = document.getElementById('form');
 const text = document.getElementById('text');
 const amount = document.getElementById('amount');
 
-const dataTransaction = [
-    {id:1 , text:"อ้นยืมเงิน", amount:-1000 },
-    {id:2 , text:"เติมสุ้มกาชา" ,amount:-2000},
-    {id:3 , text:"อ้นคืนนี้ ", amount:2000},
-    {id:4 , text:"เงินเดิอน", amount:35000}
+// const dataTransaction = [
+//     {id:1 , text:"อ้นยืมเงิน", amount:-1000 },
+//     {id:2 , text:"เติมสุ้มกาชา" ,amount:-2000},
+//     {id:3 , text:"อ้นคืนนี้ ", amount:2000},
+//     {id:4 , text:"เงินเดิอน", amount:35000}
+// ]
+// let transsaction = dataTransaction
 
-    
-]
+let transsaction =[]
+let dataTransaction = async () => {
+    try {
+        let response = await fetch('http://127.0.0.1:3000/income')
+        if (response.ok){
+            transsaction = await response.json();
+            console.log(transsaction);
+        }else{
+            console.log("failed to fetch data " + response.status);
+        }
 
-let transsaction = dataTransaction
 
-const start = () =>{
+    } catch (error) {
+        console.log("Error fetch data",error );
+    }
+
+}
+
+
+
+
+const start = async () =>{
     list.innerHTML = '';
+    await dataTransaction();
     transsaction.forEach(addDataTolist);
     calculateMouny();
 
@@ -29,11 +48,38 @@ const addDataTolist = (transsaction) =>{
     const status = transsaction.amount <0 ? 'mminus' : 'plus';
     const item = document.createElement('li');
     item.classList.add(status)
-    item.innerHTML =`${transsaction.text}<span>${symbo} ${Math.abs(transsaction.amount) }
-    </span> <button class="delete" onclick="remove(${transsaction.id})">x</button>`
-    list.appendChild(item)
+    // item.innerHTML =`${transsaction.text}<span>${symbo} ${Math.abs(transsaction.amount) }
+    // </span> <button class="delete" onclick="remove(${transsaction.id})">x</button>`
+    // list.appendChild(item)
+    const DeleteButton = document.createElement('button');
+    DeleteButton.textContent = 'x'
+    DeleteButton.classList.add('delete')
+    DeleteButton.addEventListener('click',async () =>{
+           try {
+                await axios.delete(`http://127.0.0.1:3000/income/${transsaction.id}`)
+                console.log("ลบข้อมูลเรียนร้อย");
+                console.log(`${transsaction.id}`);
+                list.innerHTML= '';
+                start();
+    } catch (error) {
+        console.log("เกิดข้อผิดพลาด",error);
+        
+    }
+    })
+    const spa = document.createElement("span")
+    const tex = document.createElement("h4");
 
+    tex.innerHTML = `${transsaction.text}`
+    spa.innerHTML = `${symbo} ${Math.abs(transsaction.amount)}`
+    item.appendChild(tex);
+    item.appendChild(spa);
+    item.appendChild(DeleteButton);
+    list.appendChild(item);
 }
+
+
+ 
+
 
 
 const  calculateMouny = () =>{
