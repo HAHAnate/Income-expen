@@ -29,7 +29,8 @@ const addDataTolist = (transsaction) =>{
     const status = transsaction.amount <0 ? 'mminus' : 'plus';
     const item = document.createElement('li');
     item.classList.add(status)
-    item.innerHTML =`${transsaction.text}<span>${symbo} ${Math.abs(transsaction.amount) }</span> <button class="delete">x</button>`
+    item.innerHTML =`${transsaction.text}<span>${symbo} ${Math.abs(transsaction.amount) }
+    </span> <button class="delete" onclick="remove(${transsaction.id})">x</button>`
     list.appendChild(item)
 
 }
@@ -40,16 +41,16 @@ const  calculateMouny = () =>{
     console.log(amount);
 
     //คำนวนยอดคงเหลือ
-    const total = amount.reduce( (result ,i)=>(result += i) );
+    const total = amount.reduce( (result ,i)=>(result += i),0 );
     console.log(total);
 
     //คำนวนรายรับ
-    const income = amount.filter(i => i>0).reduce((result,i)=>(result += i));
+    const income = amount.filter(i => i>0).reduce((result,i)=>(result += i),0);
 
     console.log(income);
     
      //คำนวนรายจ่าย
-     const expense = Math.abs(amount.filter(i => i<0).reduce((result,i)=>(result += i)));
+     const expense = Math.abs(amount.filter(i => i<0).reduce((result,i)=>(result += i),0));
 
 
      console.log(expense);
@@ -81,8 +82,11 @@ const addTransactions = (e) => {
 
         transsaction.push(data);
         addDataTolist(data);
-        calculateMouny();
+        calculateMouny();           
 
+
+        text.value = '';
+        amount.value = 0;
 
     }
 }
@@ -94,7 +98,16 @@ const autoid = () => {
 
 form.addEventListener('submit', addTransactions);
 
+const remove = (id) => {
+    transsaction = transsaction.filter(transsaction => transsaction.id!== id);
+    //1 2 3 4  =>  id 2
+    start()
+    console.log(transsaction);
 
+
+
+
+}
 
 
 

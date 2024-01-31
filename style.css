@@ -6,7 +6,7 @@
 
  *{
     font-family: 'IBM Plex Sans Thai Looped', sans-serif;
-    box-sizing: border-box;
+
 
  }
  body {
@@ -48,6 +48,7 @@
     box-shadow: var(--box-shadow);
     padding: 20px;
     margin:  20px 0;
+    text-align: center;
     
  }
  .income-expense-container>div{
@@ -58,11 +59,15 @@
  }
  .showincome{
    border-right:   3px solid #864;
+  
+  
  }
 
 .money.plus{
    padding-right: 100px;
-color: #FFB000;
+   color: #FFB000;
+  
+ 
 
 }
 .money.minus {
