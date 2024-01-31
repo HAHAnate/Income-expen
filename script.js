@@ -6,13 +6,7 @@ const form = document.getElementById('form');
 const text = document.getElementById('text');
 const amount = document.getElementById('amount');
 
-// const dataTransaction = [
-//     {id:1 , text:"อ้นยืมเงิน", amount:-1000 },
-//     {id:2 , text:"เติมสุ้มกาชา" ,amount:-2000},
-//     {id:3 , text:"อ้นคืนนี้ ", amount:2000},
-//     {id:4 , text:"เงินเดิอน", amount:35000}
-// ]
-// let transsaction = dataTransaction
+
 
 let transsaction =[]
 let dataTransaction = async () => {
@@ -22,18 +16,12 @@ let dataTransaction = async () => {
             transsaction = await response.json();
             console.log(transsaction);
         }else{
-            console.log("failed to fetch data " + response.status);
+            console.log("failed to fetch data " , response.status);
         }
-
-
     } catch (error) {
         console.log("Error fetch data",error );
     }
-
 }
-
-
-
 
 const start = async () =>{
     list.innerHTML = '';
@@ -48,9 +36,7 @@ const addDataTolist = (transsaction) =>{
     const status = transsaction.amount <0 ? 'mminus' : 'plus';
     const item = document.createElement('li');
     item.classList.add(status)
-    // item.innerHTML =`${transsaction.text}<span>${symbo} ${Math.abs(transsaction.amount) }
-    // </span> <button class="delete" onclick="remove(${transsaction.id})">x</button>`
-    // list.appendChild(item)
+   
     const DeleteButton = document.createElement('button');
     DeleteButton.textContent = 'x'
     DeleteButton.classList.add('delete')
@@ -77,26 +63,21 @@ const addDataTolist = (transsaction) =>{
     list.appendChild(item);
 }
 
-
- 
-
-
-
 const  calculateMouny = () =>{
     const amount = transsaction.map(transsaction => transsaction.amount);
     console.log(amount);
 
     //คำนวนยอดคงเหลือ
-    const total = amount.reduce( (result ,i)=>(result += i),0 );
+    const total = amount.reduce( (result ,i)=>(result += i),0 ).toFixed(2);
     console.log(total);
 
     //คำนวนรายรับ
-    const income = amount.filter(i => i>0).reduce((result,i)=>(result += i),0);
+    const income = amount.filter(i => i>0).reduce((result,i)=>(result += i),0).toFixed(2);
 
     console.log(income);
     
      //คำนวนรายจ่าย
-     const expense = Math.abs(amount.filter(i => i<0).reduce((result,i)=>(result += i),0));
+     const expense = Math.abs(amount.filter(i => i<0).reduce((result,i)=>(result += i),0)).toFixed(2);
 
 
      console.log(expense);
@@ -108,53 +89,29 @@ const  calculateMouny = () =>{
 }
 
 
-const addTransactions = (e) => {
+const addTransactions = async (e) => {
     e.preventDefault();
     if(text.value.trim() === ''|| amount.value.trim() === ''){
         alert('กรุณากรอกข้อมูลให้ครบ');
     }   
     else{
-        console.log(text.value);
-        console.log(amount.value);
-        console.log(autoid());
-
-
-        const data ={
-            id:autoid(),
-            text:text.value,
-            amount:Number.parseFloat(amount.value)
-
+        try{
+            await axios.post('http://127.0.0.1:3000/income', {
+                text: text.value,
+                amount: amount.value
+            });
+            
+            text.value = '';
+            amount.value = '';
+            start();
+        } catch (error) {
+            console.error("Error sending income data: ", error);
         }
-
-        transsaction.push(data);
-        addDataTolist(data);
-        calculateMouny();           
-
-
-        text.value = '';
-        amount.value = 0;
-
     }
 }
 const autoid = () => {
     return Math.floor(Math.random() *1000000) ;
 }
 
-
-
 form.addEventListener('submit', addTransactions);
-
-const remove = (id) => {
-    transsaction = transsaction.filter(transsaction => transsaction.id!== id);
-    //1 2 3 4  =>  id 2
-    start()
-    console.log(transsaction);
-
-
-
-
-}
-
-
-
 start()
